@@ -40,9 +40,9 @@ class MainWindow(tk.Tk):
         self._screen_width = self.winfo_screenwidth()
         self._screen_height = self.winfo_screenheight()
 
-        # 动态计算窗口大小（屏幕的 80% 宽度，85% 高度）
-        self._window_width = int(self._screen_width * 0.8)
-        self._window_height = int(self._screen_height * 0.85)
+        # 动态计算窗口大小（屏幕的 48% 宽度，51% 高度）
+        self._window_width = int(self._screen_width * 0.48)
+        self._window_height = int(self._screen_height * 0.51)
 
         # 最小尺寸限制
         self._window_width = max(900, self._window_width)
