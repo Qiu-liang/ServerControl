@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+*.spec
+
+# 加密配置文件（凭据存储）
+config/*.enc
+*.enc
+
+# 虚拟环境
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# 日志文件
+*.log
+
+# 编辑器临时文件
+*.bak
+*.tmp
+*.temp
+
+# Windows
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# macOS
+.AppleDouble
+.LSOverride
+
+# Qoder / AI 工具
+.qoder/

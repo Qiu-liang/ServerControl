@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "commands": [
+    {
+      "id": "start_service",
+      "name": "启动服务",
+      "description": "启动 MC 服务器（screen 会话）",
+      "command": "bash /home/liangqiu/start.sh",
+      "category": "服务管理",
+      "confirm": true,
+      "confirm_message": "确定要启动 MC 服务器吗？"
+    },
+    {
+      "id": "stop_service",
+      "name": "关闭服务",
+      "description": "安全关闭 MC 服务器（screen 会话）",
+      "command": "bash /home/liangqiu/stop.sh",
+      "category": "服务管理",
+      "confirm": true,
+      "confirm_message": "确定要关闭 MC 服务器吗？这将断开所有玩家连接。"
+    },
+
+    {
+      "id": "view_logs",
+      "name": "查看日志",
+      "description": "查看应用最近 100 行访问日志",
+      "command": "tail -n 50 /home/liangqiu/mcserver/logs/latest.log",
+      "category": "日志监控",
+      "confirm": false
+    },
+    {
+      "id": "view_error_logs",
+      "name": "错误日志",
+      "description": "查看最近 50 行错误日志",
+      "command": "grep -iE \"ERROR|WARN|FATAL\" /home/liangqiu/mcserver/logs/latest.log | tail -n 50",
+      "category": "日志监控",
+      "confirm": false
+    },
+    {
+      "id": "check_status",
+      "name": "服务状态",
+      "description": "查看所有服务的运行状态",
+      "command": "ss -tlnp | grep -q ':25565 ' && echo '✅ 端口监听正常' || echo '❌ 端口未开放'",
+      "category": "状态查询",
+      "confirm": false
+    },
+    {
+      "id": "disk_usage",
+      "name": "磁盘用量",
+      "description": "查看服务器磁盘空间使用情况",
+      "command": "df -h",
+      "category": "状态查询",
+      "confirm": false
+    },
+    {
+      "id": "system_info",
+      "name": "系统信息",
+      "description": "查看服务器基本系统信息",
+      "command": "uname -a && uptime && free -h",
+      "category": "状态查询",
+      "confirm": false
+    }
+  ]
+}

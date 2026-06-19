@@ -1,0 +1,8 @@
+# ServerControl 依赖清单
+# tkinter 为 Python 标准库，无需安装
+paramiko>=3.4,<4.0
+keyring>=25.0,<26.0
+cryptography>=42.0,<44.0
+
+# 打包时需要（开发环境安装即可）
+# pyinstaller>=6.0,<7.0
