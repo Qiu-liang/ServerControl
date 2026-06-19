@@ -145,8 +145,6 @@ class MainWindow(tk.Tk):
         cmd_menu = tk.Menu(menubar, tearoff=0)
         cmd_menu.add_command(label="执行自定义命令", command=self._run_custom_command)
         cmd_menu.add_command(label="停止当前命令", command=self._stop_command)
-        cmd_menu.add_separator()
-        cmd_menu.add_command(label="编辑命令配置", command=self._open_commands_json)
         menubar.add_cascade(label="命令", menu=cmd_menu)
 
         # 帮助菜单
