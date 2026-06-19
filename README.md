@@ -69,9 +69,6 @@ pip install -r requirements.txt
 python src/main.py
 ```
 
-### 3. 首次启动
-
-首次启动时会自动进入配置向导，引导你创建第一个服务器连接。
 
 ## 打包为可执行文件
 
