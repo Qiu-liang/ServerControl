@@ -12,7 +12,8 @@ import logging
 from ui.styles import (
     COLOR_PRIMARY, COLOR_BG, COLOR_BG_WHITE, COLOR_TEXT, COLOR_TEXT_SECONDARY,
     COLOR_SUCCESS, COLOR_ERROR, COLOR_WARNING,
-    FONT_NORMAL, FONT_BOLD, FONT_TITLE, FONT_SECTION, FONT_SMALL
+    FONT_NORMAL, FONT_BOLD, FONT_TITLE, FONT_SECTION, FONT_SMALL,
+    get_scaled_font, get_scaled_size, get_scale_factor
 )
 from ui.output_console import OutputConsole
 from ui.command_panel import CommandPanel
@@ -32,17 +33,27 @@ class MainWindow(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("ServerControl - 远程服务器管理工具")
-        self.geometry("1250x950")
-        self.minsize(900, 600)
         self.configure(bg=COLOR_BG)
 
-        # 窗口居中显示
+        # 获取屏幕尺寸并动态计算窗口大小
         self.update_idletasks()
-        screen_width = self.winfo_screenwidth()
-        screen_height = self.winfo_screenheight()
-        x = (screen_width - 1250) // 2
-        y = (screen_height - 950) // 2
-        self.geometry(f"1250x950+{x}+{y}")
+        self._screen_width = self.winfo_screenwidth()
+        self._screen_height = self.winfo_screenheight()
+
+        # 动态计算窗口大小（屏幕的 80% 宽度，85% 高度）
+        self._window_width = int(self._screen_width * 0.8)
+        self._window_height = int(self._screen_height * 0.85)
+
+        # 最小尺寸限制
+        self._window_width = max(900, self._window_width)
+        self._window_height = max(600, self._window_height)
+
+        self.minsize(900, 600)
+
+        # 窗口居中显示
+        x = (self._screen_width - self._window_width) // 2
+        y = (self._screen_height - self._window_height) // 2
+        self.geometry(f"{self._window_width}x{self._window_height}+{x}+{y}")
 
         # 核心组件
         self._ssh_manager = SSHManager()

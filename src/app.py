@@ -35,7 +35,11 @@ class ServerControlApp:
             self._root.withdraw()
 
             from ui.styles import apply_theme
-            apply_theme(self._root)
+            # 获取屏幕尺寸并传递给主题应用函数
+            self._root.update_idletasks()
+            screen_width = self._root.winfo_screenwidth()
+            screen_height = self._root.winfo_screenheight()
+            apply_theme(self._root, screen_width, screen_height)
 
             if self._needs_setup():
                 self._run_setup_wizard()
