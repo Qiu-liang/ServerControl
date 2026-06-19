@@ -7,6 +7,7 @@
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 import logging
+import threading
 
 from ui.styles import (
     COLOR_PRIMARY, COLOR_BG, COLOR_TEXT, COLOR_TEXT_SECONDARY,
@@ -128,8 +129,9 @@ class ConnectionDialog(tk.Toplevel):
         btn_frame = ttk.Frame(self)
         btn_frame.pack(fill=tk.X, padx=pad_x, pady=(16, pad_y))
 
-        ttk.Button(btn_frame, text="测试连接", style="TButton",
-                    command=self._test_connection).pack(side=tk.LEFT)
+        self._test_btn = ttk.Button(btn_frame, text="测试连接", style="TButton",
+                    command=self._test_connection)
+        self._test_btn.pack(side=tk.LEFT)
 
         ttk.Button(btn_frame, text="取消", style="TButton",
                     command=self.destroy).pack(side=tk.RIGHT, padx=(8, 0))
@@ -166,13 +168,49 @@ class ConnectionDialog(tk.Toplevel):
             self._keyfile_var.set(path)
 
     def _test_connection(self):
-        """测试连接（由外部处理，这里仅验证输入）。"""
+        """测试连接。"""
         config = self._build_config()
         if not config["host"] or not config["username"]:
             messagebox.showwarning("提示", "请填写服务器地址和用户名后再测试连接。")
             return
-        # 实际测试由主窗口处理
-        messagebox.showinfo("提示", "测试连接功能将在主窗口中执行。")
+        if self._auth_mode.get() == "password" and not config["password"]:
+            messagebox.showwarning("提示", "请填写密码后再测试连接。")
+            return
+        if self._auth_mode.get() == "keyfile" and not config["key_file"]:
+            messagebox.showwarning("提示", "请选择私钥文件后再测试连接。")
+            return
+
+        # 禁用测试按钮，防止重复点击
+        self._test_btn.config(state=tk.DISABLED, text="测试中...")
+
+        def _test_task():
+            from core.ssh_manager import SSHManager
+            ssh = SSHManager()
+            try:
+                ssh.connect(
+                    host=config["host"],
+                    port=config["port"],
+                    username=config["username"],
+                    password=config.get("password"),
+                    key_file=config.get("key_file"),
+                )
+                ssh.disconnect()
+                return True, "连接成功"
+            except Exception as e:
+                return False, str(e)
+
+        def _on_result(success, message):
+            self._test_btn.config(state=tk.NORMAL, text="测试连接")
+            if success:
+                messagebox.showinfo("测试成功", f"成功连接到 {config['host']}:{config['port']}")
+            else:
+                messagebox.showerror("测试失败", f"连接失败: {message}")
+
+        def _run_test():
+            success, message = _test_task()
+            self.after(0, lambda: _on_result(success, message))
+
+        threading.Thread(target=_run_test, daemon=True).start()
 
     def _build_config(self) -> dict:
         """构建配置字典。"""
