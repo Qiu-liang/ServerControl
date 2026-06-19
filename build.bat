@@ -17,7 +17,14 @@ if errorlevel 1 (
     )
 )
 
-echo [1/2] 开始打包 ServerControl...
+echo [1/3] 清理旧的构建文件...
+if exist "build" rmdir /s /q "build"
+if exist "dist" rmdir /s /q "dist"
+if exist "ServerControl.spec" del /q "ServerControl.spec"
+echo 完成
+echo.
+
+echo [2/3] 开始打包 ServerControl...
 echo.
 
 pyinstaller ^
@@ -25,10 +32,18 @@ pyinstaller ^
     --windowed ^
     --name "ServerControl" ^
     --add-data "config;config" ^
+    --add-data "assets;assets" ^
     --hidden-import "keyring.backends.windows" ^
+    --hidden-import "keyring.backends.macOS" ^
+    --hidden-import "keyring.backends.SecretService" ^
     --hidden-import "paramiko.transport" ^
     --hidden-import "paramiko.channel" ^
+    --hidden-import "paramiko.ecdsakey" ^
+    --hidden-import "paramiko.rsakey" ^
+    --hidden-import "paramiko.dsskey" ^
     --hidden-import "cryptography.fernet" ^
+    --hidden-import "cryptography.hazmat.primitives.ciphers" ^
+    --hidden-import "cryptography.hazmat.primitives.kdf.pbkdf2" ^
     --noconfirm ^
     src/main.py
 
@@ -40,11 +55,13 @@ if errorlevel 1 (
 )
 
 echo.
-echo [2/2] 打包成功！
+echo [3/3] 打包成功！
 echo.
 echo 输出文件: dist\ServerControl.exe
 echo.
-echo 请将 dist\ServerControl.exe 和 config\commands.json
-echo 一起分发给用户使用。
+echo 使用说明:
+echo   1. 将 dist\ServerControl.exe 复制到目标机器
+echo   2. 程序首次运行时会自动创建配置目录
+echo   3. 预设命令已内置在程序中
 echo.
 pause
