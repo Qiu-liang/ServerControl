@@ -31,6 +31,7 @@ pyinstaller ^
     --onefile ^
     --windowed ^
     --name "ServerControl" ^
+    --paths src ^
     --add-data "config;config" ^
     --add-data "assets;assets" ^
     --hidden-import "keyring.backends.windows" ^
