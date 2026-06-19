@@ -151,7 +151,7 @@ class MainWindow(tk.Tk):
 
         # 帮助菜单
         help_menu = tk.Menu(menubar, tearoff=0)
-        help_menu.add_command(label="使用手册", command=self._show_help)
+        help_menu.add_command(label="项目地址", command=self._open_github)
         help_menu.add_command(label="关于", command=self._show_about)
         menubar.add_cascade(label="帮助", menu=help_menu)
 
@@ -400,14 +400,10 @@ class MainWindow(tk.Tk):
         else:
             messagebox.showinfo("提示", f"命令配置文件不存在: {path}")
 
-    def _show_help(self):
-        """打开使用手册。"""
-        guide = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-                              "USER_GUIDE.md")
-        if os.path.exists(guide):
-            os.startfile(guide)
-        else:
-            messagebox.showinfo("提示", "使用手册文件不存在。")
+    def _open_github(self):
+        """打开项目 GitHub 地址。"""
+        import webbrowser
+        webbrowser.open("https://github.com/Qiu-liang/ServerControl")
 
     def _show_about(self):
         """关于对话框。"""

@@ -42,7 +42,9 @@ class ServerControlApp:
             else:
                 self._show_main_window()
 
-            self._root.mainloop()
+            # _root 可能在上述方法中被设置为 None，需要检查
+            if self._root is not None:
+                self._root.mainloop()
 
         except Exception as e:
             logger.critical("应用启动失败: %s", e, exc_info=True)
